@@ -20,7 +20,7 @@ const customConfig = {
   },
   test: {
     connection: {
-      database: 'nc_news_test'
+      database: 'nc_news_test',
       user:'carlos',
       password:'Yosipuedo30988'
     }

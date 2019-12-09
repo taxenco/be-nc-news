@@ -147,40 +147,15 @@ describe("makeRefObj", () => {
   });
 });
 
-describe.only("formatComments", () => {
+describe("formatComments", () => {
   it("returns an empty array of objects when an empty array of the object is passed", () => {
     const input = [];
     const actual = formatComments(input);
     const expected = [];
     expect(actual).to.be.eql(expected);
   });
-  it("function formatComments does not mutate the original data when it is invoked", () => {
-    const input = [
-      {
-        body:
-          "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
-        belongs_to: "They're not exactly dogs, are they?",
-        created_by: "butter_bridge",
-        votes: 16,
-        created_at: 1511354163389
-      }
-    ];
-    const articleRef = [{ "They're not exactly dogs, are they?": 1 }];
-    const checkedInput = [
-      {
-        body:
-          "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
-        belongs_to: "They're not exactly dogs, are they?",
-        created_by: "butter_bridge",
-        votes: 16,
-        created_at: 1511354163389
-      }
-    ];
-    formatComments(input, articleRef);
-    expect(input).to.be.eql(checkedInput);
-  });
-  it("returns an array of objects with the key of the items title when an array of objects is passed", () => {
-    const commentInput = [
+  it("returns an array of comment objects (comments) and a reference object, and return a new array of formatted comments", () => {
+    const inputOne = [
       {
         body:
           "Itaque quisquam est similique et est perspiciatis reprehenderit voluptatem autem. Voluptatem accusantium eius error adipisci quibusdam doloribus.",
@@ -191,10 +166,10 @@ describe.only("formatComments", () => {
         created_at: 1468087638932
       }
     ];
-    const articleRef = [
-      { "The People Tracking Every Touch, Pass And Tackle in the World Cup": 1 }
-    ];
-    const actual = formatComments(commentInput, articleRef);
+    const inputTwo = {
+      "The People Tracking Every Touch, Pass And Tackle in the World Cup": 1
+    };
+    const actual = formatComments(inputOne, inputTwo);
     const expected = [
       {
         body:
@@ -203,51 +178,6 @@ describe.only("formatComments", () => {
         author: "tickle122",
         votes: -1,
         created_at: new Date(1468087638932)
-      }
-    ];
-    expect(actual).to.be.eql(expected);
-  });
-  it("returns an array of objects with the key of the items title when an array of objects is passed", () => {
-    const commentInput = [
-      {
-        body:
-          "Itaque quisquam est similique et est perspiciatis reprehenderit voluptatem autem. Voluptatem accusantium eius error adipisci quibusdam doloribus.",
-        belongs_to:
-          "The People Tracking Every Touch, Pass And Tackle in the World Cup",
-        created_by: "tickle122",
-        votes: -1,
-        created_at: 1468087638932
-      },
-      {
-        body: "Nobis consequatur animi. Ullam nobis quaerat voluptates veniam.",
-        belongs_to: "Making sense of Redux",
-        created_by: "grumpy19",
-        votes: 7,
-        created_at: 1478813209256
-      }
-    ];
-    const articleRef = [
-      {
-        "The People Tracking Every Touch, Pass And Tackle in the World Cup": 1
-      },
-      { "Making sense of Redux": 2 }
-    ];
-    const actual = formatComments(commentInput, articleRef);
-    const expected = [
-      {
-        body:
-          "Itaque quisquam est similique et est perspiciatis reprehenderit voluptatem autem. Voluptatem accusantium eius error adipisci quibusdam doloribus.",
-        article_id: 1,
-        author: "tickle122",
-        votes: -1,
-        created_at: new Date(1468087638932)
-      },
-      {
-        body: "Nobis consequatur animi. Ullam nobis quaerat voluptates veniam.",
-        article_id: 2,
-        author: "grumpy19",
-        votes: 7,
-        created_at: new Date(1478813209256)
       }
     ];
     expect(actual).to.be.eql(expected);
