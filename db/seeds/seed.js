@@ -21,8 +21,10 @@ exports.seed = function(knex) {
     })
     .then(userInsert => {
       const formatArticleData = formatDates(articleData);
-      const formatedArticleData = knex("articles").insert(formatArticleData);
-      return formatedArticleData.returning("*");
+      const formatedArticleData = knex("articles")
+        .insert(formatArticleData)
+        .returning("*");
+      return formatedArticleData;
     })
     .then(articleInsert => {
       const formatArticleData = makeRefObj(articleInsert);
