@@ -364,9 +364,7 @@ describe("/api", () => {
         .expect(200)
         .then(response => {
           expect(response.body).to.be.an("object");
-          expect(response.body.articles).to.be.sortedBy("created_at", {
-            descending: true
-          });
+          expect(response.body.articles).to.be.descendingBy("created_at");
         });
     });
     it("GET:200 /api/articles - returns an object with an array of articles sorted by article_id and descending by default", () => {
@@ -454,20 +452,14 @@ describe("/api", () => {
           );
         });
     });
-    it('GET:200 /api/articles - returns filtered by topic', () => {
+    it("GET:200 /api/articles - empty array for user with no articles", () => {
       return request(app)
-      .get("/api/articles?author=mitch")
-      .expect(200)
-      .then(response => {
-        expect(response.body).to.be.an("object");
-        expect(response.body.articles).to.be.sortedBy("created_at", {
-          descending: true
+        .get("/api/articles?author=lurker")
+        .expect(200)
+        .then(response => {
+          expect(response.body).to.be.an("object");
+          expect(response.body.articles).to.eql([]);
         });
-        const { articles } = response.body;
-        articles.forEach(element =>
-          expect(element.topic).to.be.equal("mitch")
-        );
-      });
     });
     it("PATCH:400 /api/articles/:article_id -return error 400 when invalid object is passed", () => {
       return request(app)

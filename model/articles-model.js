@@ -1,4 +1,5 @@
 const connection = require("../db/connection");
+const { fetchUserByUserName } = require("./users-model");
 
 const fetchArticleById = article_id => {
   return connection
@@ -103,14 +104,16 @@ const fetchArticles = (
     .count({ comment_count: "comments.comment_id" })
     .returning("*")
     .then(article => {
-      if (article.length === 0) {
-        return Promise.reject({
-          status: 404,
-          msg: `Not found`
-        });
+      if (article.length >= 1) {
+        return [article];
       } else {
-        return article;
+        if (author) {
+          return Promise.all([article, fetchUserByUserName(author)]);
+        }
       }
+    })
+    .then(([articles]) => {
+      return articles;
     });
 };
 
