@@ -1,26 +1,24 @@
 const connection = require("../db/connection");
 
 const fetchArticleById = article_id => {
-  const articlePromise = connection
-    .select("*")
+  return connection
+    .select("articles.*")
     .from("articles")
-    .where("article_id", "=", article_id)
-    .returning("*");
-  const commentPromise = connection
-    .select("*")
-    .from("comments")
-    .where("article_id", "=", article_id)
-    .returning("*");
-  return Promise.all([articlePromise, commentPromise]).then(
-    ([[articleQuery], commentQuery]) => {
-      if (articleQuery === undefined) {
-        return Promise.reject({ status: 404, msg: "Not found" });
+    .where("articles.article_id", "=", article_id)
+    .leftJoin("comments", "articles.article_id", "comments.article_id")
+    .groupBy("articles.article_id")
+    .count({ comment_count: "comments.comment_id" })
+    .returning("*")
+    .then(article => {
+      if (article.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: `Not found`
+        });
       } else {
-        articleQuery.comment_count = commentQuery.length;
-        return articleQuery;
+        return article;
       }
-    }
-  );
+    });
 };
 
 const updateArticleById = (article_id, inc_votes) => {
@@ -39,31 +37,21 @@ const updateArticleById = (article_id, inc_votes) => {
     });
 };
 
-const addArticleComment = (article_id, information) => {
+const addArticleComment = (article_id, username, body) => {
+  const newBody = {};
+  newBody.author = username;
+  newBody.article_id = article_id;
+  newBody.body = body;
   return connection
-    .select("*")
-    .from("articles")
-    .where("article_id", "=", article_id)
+    .insert(newBody)
+    .into("comments")
     .returning("*")
-    .then(([article]) => {
-      if (article === undefined) {
-        return Promise.reject({ status: 404, msg: "Not found" });
-      }
-      const newBody = {};
-      newBody.author = article.author;
-      newBody.article_id = article_id;
-      newBody.votes = 0;
-      newBody.body = information.body;
-      return newBody;
-    })
     .then(comment => {
-      return connection
-        .from("comments")
-        .insert(comment)
-        .returning("*");
-    })
-    .then(([postArticle]) => {
-      return postArticle;
+      if (comment.length === 0) {
+        return Promise.reject({ status: 404, msg: "Not found" });
+      } else {
+        return comment;
+      }
     });
 };
 
@@ -90,9 +78,46 @@ const fetchArticleComment = (
     });
 };
 
+const fetchArticles = (
+  sort_by = "created_at",
+  order = "desc",
+  author,
+  topic
+) => {
+  return connection
+    .select("articles.*")
+    .from("articles")
+    .leftJoin("comments", "articles.article_id", "comments.article_id")
+    .groupBy("articles.article_id")
+    .orderBy(sort_by, order)
+    .modify(query => {
+      if (author !== undefined) {
+        return query.where("articles.author", "=", author);
+      }
+    })
+    .modify(query => {
+      if (topic !== undefined) {
+        return query.where("articles.topic", "=", topic);
+      }
+    })
+    .count({ comment_count: "comments.comment_id" })
+    .returning("*")
+    .then(article => {
+      if (article.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: `Not found`
+        });
+      } else {
+        return article;
+      }
+    });
+};
+
 module.exports = {
   fetchArticleById,
   updateArticleById,
   addArticleComment,
-  fetchArticleComment
+  fetchArticleComment,
+  fetchArticles
 };

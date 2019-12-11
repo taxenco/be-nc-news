@@ -2,7 +2,8 @@ const {
   fetchArticleById,
   updateArticleById,
   addArticleComment,
-  fetchArticleComment
+  fetchArticleComment,
+  fetchArticles
 } = require("../model/articles-model");
 
 exports.getArticleById = (request, response, next) => {
@@ -25,22 +26,30 @@ exports.patchArticleById = (request, response, next) => {
 };
 
 exports.postArticleComment = (request, response, next) => {
-  const { body } = request;
+  const { username, body } = request.body;
   const { article_id } = request.params;
-  addArticleComment(article_id, body)
-    .then(article => {
-      response.status(200).send({ article });
+  addArticleComment(article_id, username, body)
+    .then(([comment]) => {
+      response.status(200).send({ comment });
     })
     .catch(next);
 };
 
 exports.getArticleComment = (request, response, next) => {
-  // console.log(request.query);
   const { sort_by, order } = request.query;
   const { article_id } = request.params;
   fetchArticleComment(article_id, sort_by, order)
     .then(comments => {
       response.status(200).send({ comments });
+    })
+    .catch(next);
+};
+
+exports.getArticles = (request, response, next) => {
+  const { sort_by, order, topic, author } = request.query;
+  fetchArticles(sort_by, order, author, topic)
+    .then(articles => {
+      response.status(200).send({ articles });
     })
     .catch(next);
 };

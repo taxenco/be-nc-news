@@ -11,7 +11,7 @@ exports.handlingErrors = (error, request, response, next) => {
 };
 exports.sqlErrors = (error, request, response, next) => {
   // console.log(error);
-  const sqlError = ["22P02", "23502", "42703"];
+  const sqlError = ["22P02", "23502", "42703", '23503'];
   if (sqlError.includes(error.code)) {
     response.status(400).send({ msg: "Bad request" });
   } else {
