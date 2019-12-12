@@ -10,9 +10,14 @@ exports.handlingErrors = (error, request, response, next) => {
   }
 };
 exports.sqlErrors = (error, request, response, next) => {
-  const sqlError = ["22P02", "23502", "42703", "23503"];
-  if (sqlError.includes(error.code)) {
+  const sqlError400 = ["22P02", "42703", "23503"];
+  const sqlError404 = ["23502"];
+
+  if (sqlError400.includes(error.code)) {
     response.status(400).send({ msg: "Bad request" });
+  }
+  if (sqlError404.includes(error.code)) {
+    response.status(404).send({ msg: "Not found" });
   } else {
     next(error);
   }

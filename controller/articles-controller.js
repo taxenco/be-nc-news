@@ -30,7 +30,7 @@ exports.postArticleComment = (request, response, next) => {
   const { article_id } = request.params;
   addArticleComment(article_id, username, body)
     .then(([comment]) => {
-      response.status(200).send({ comment });
+      response.status(201).send({ comment });
     })
     .catch(next);
 };

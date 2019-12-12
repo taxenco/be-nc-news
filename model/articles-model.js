@@ -1,5 +1,6 @@
 const connection = require("../db/connection");
 const { fetchUserByUserName } = require("./users-model");
+const { fetchAllTopics } = require("./topics-model");
 
 const fetchArticleById = article_id => {
   return connection
@@ -22,7 +23,7 @@ const fetchArticleById = article_id => {
     });
 };
 
-const updateArticleById = (article_id, inc_votes) => {
+const updateArticleById = (article_id, inc_votes = 0) => {
   return connection
     .select("*")
     .from("articles")
@@ -62,7 +63,7 @@ const fetchArticleComment = (
   order = "desc"
 ) => {
   return connection
-    .select("comment_id", "votes", "created_at", "author", "body")
+    .select("*")
     .from("comments")
     .where("article_id", "=", article_id)
     .modify(query => {
@@ -109,10 +110,15 @@ const fetchArticles = (
       } else {
         if (author) {
           return Promise.all([article, fetchUserByUserName(author)]);
+        } else if (topic) {
+          return Promise.all([article, fetchAllTopics(topic)]);
         }
       }
     })
-    .then(([articles]) => {
+    .then(([articles, topic]) => {
+      if (articles.length === 0 && topic.length === 0) {
+        return Promise.reject({ status: 404, msg: "Not found" });
+      }
       return articles;
     });
 };
