@@ -253,7 +253,7 @@ describe("/api", () => {
     });
     it("GET:200 /api/articles/:article_id/comments - returns comments by article", () => {
       return request(app)
-        .get("/api/articles/2/comments")
+        .get("/api/articles/1/comments")
         .expect(200)
         .then(response => {
           expect(response.body).to.be.an("object");
@@ -273,22 +273,11 @@ describe("/api", () => {
     });
     it("GET:200 /api/articles/:article_id/comments - returns comments by article", () => {
       return request(app)
-        .get("/api/articles/1/comments")
+        .get("/api/articles/2/comments")
         .expect(200)
         .then(response => {
           expect(response.body).to.be.an("object");
-          expect(response.body.comments[0]).to.contain.keys(
-            "comment_id",
-            "author",
-            "votes",
-            "body",
-            "created_at"
-          );
-          expect(response.body.comments[0].comment_id).to.be.a("number");
-          expect(response.body.comments[0].author).to.be.a("string");
-          expect(response.body.comments[0].votes).to.be.a("number");
-          expect(response.body.comments[0].body).to.be.a("string");
-          expect(response.body.comments[0].created_at).to.be.a("string");
+          expect(response.body.comments.length).to.be.equal(0);
         });
     });
     it("GET:200 /api/articles/:article_id/comments - returns comments by article", () => {

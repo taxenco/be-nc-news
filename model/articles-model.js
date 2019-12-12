@@ -72,11 +72,17 @@ const fetchArticleComment = (
       }
     })
     .then(comments => {
-      console.log(comments);
-      if (comments.length === 0) {
-        return Promise.reject({ status: 404, msg: "Not found" });
+      if (article_id) {
+        return Promise.all([comments, fetchArticleById(article_id)]);
       }
-      return comments;
+      return Promise.reject({ status: 404, msg: "Not found" });
+    })
+    .then(([commentPromise, articlePromise]) => {
+      if (commentPromise.length === 0 && articlePromise.length > 0) {
+        return commentPromise;
+      } else {
+        return commentPromise;
+      }
     });
 };
 
