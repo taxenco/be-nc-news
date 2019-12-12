@@ -151,7 +151,7 @@ describe("/api", () => {
         .expect(200)
         .then(response => {
           expect(response.body).to.be.an("object");
-          expect(response.body.article[0]).to.contain.keys(
+          expect(response.body.article).to.contain.keys(
             "article_id",
             "title",
             "body",
@@ -161,14 +161,14 @@ describe("/api", () => {
             "created_at",
             "comment_count"
           );
-          expect(response.body.article[0].article_id).to.be.a("number");
-          expect(response.body.article[0].title).to.be.a("string");
-          expect(response.body.article[0].body).to.be.a("string");
-          expect(response.body.article[0].votes).to.be.a("number");
-          expect(response.body.article[0].topic).to.be.a("string");
-          expect(response.body.article[0].author).to.be.a("string");
-          expect(response.body.article[0].created_at).to.be.a("string");
-          expect(response.body.article[0].comment_count).to.be.a("string");
+          expect(response.body.article.article_id).to.be.a("number");
+          expect(response.body.article.title).to.be.a("string");
+          expect(response.body.article.body).to.be.a("string");
+          expect(response.body.article.votes).to.be.a("number");
+          expect(response.body.article.topic).to.be.a("string");
+          expect(response.body.article.author).to.be.a("string");
+          expect(response.body.article.created_at).to.be.a("string");
+          expect(response.body.article.comment_count).to.be.a("string");
         });
     });
     it("PATCH:200 /api/articles/:article_id - returns an article by its article_id with the number of votes decremented", () => {
@@ -253,7 +253,7 @@ describe("/api", () => {
     });
     it("GET:200 /api/articles/:article_id/comments - returns comments by article", () => {
       return request(app)
-        .get("/api/articles/1/comments")
+        .get("/api/articles/2/comments")
         .expect(200)
         .then(response => {
           expect(response.body).to.be.an("object");
