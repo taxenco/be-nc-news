@@ -4,6 +4,8 @@ const usersRouter = require("./routers/usersRouter");
 const articlesRouter = require("./routers/articlesRoute");
 const commentsRouter = require("./routers/commentsRoute");
 const { badMethod } = require("../error-handler/error-handler");
+const json = require("../endpoints.json");
+
 
 apiRouter.use("/topics", topicsRouter);
 apiRouter.use("/users", usersRouter);

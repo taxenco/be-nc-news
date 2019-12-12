@@ -16,6 +16,14 @@ describe("/api", () => {
     return connection.seed.run();
   });
   describe("/invalidEndpoint", () => {
+    it.only("GET:200 /api - return JSON describing all the available endpoints on your API", () => {
+      return request(app)
+        .get("/api")
+        .expect(200)
+        .then(response => {
+          expect(response.body).to.be.an("object");
+        });
+    });
     it("GET:404 - invalid endpoint throws 404 error", () => {
       return request(app)
         .get("/invalidEndPoint")
@@ -394,11 +402,12 @@ describe("/api", () => {
           expect(response.body.articles[0].comment_count).to.be.a("string");
         });
     });
-    it("GET:200 /api/articles - returns an object with an array of articles sorted by any valid column and default to created_at and descending", () => {
+    xit("GET:200 /api/articles - returns an object with an array of articles sorted by any valid column and default to created_at and descending", () => {
       return request(app)
         .get("/api/articles")
         .expect(200)
         .then(response => {
+          console.log(response.body);
           expect(response.body).to.be.an("object");
           expect(response.body.articles).to.be.descendingBy("created_at");
         });
