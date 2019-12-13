@@ -10,8 +10,9 @@ exports.handlingErrors = (error, request, response, next) => {
   }
 };
 exports.sqlErrors = (error, request, response, next) => {
-  const sqlError400 = ["22P02", "42703", "23503"];
-  const sqlError404 = ["23502"];
+  console.log(error)
+  const sqlError400 = ["22P02", "42703",'23502'];
+  const sqlError404 = ["23503"];
 
   if (sqlError400.includes(error.code)) {
     response.status(400).send({ msg: "Bad request" });

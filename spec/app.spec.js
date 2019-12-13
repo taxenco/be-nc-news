@@ -600,55 +600,24 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Bad request");
         });
     });
-    it("POST:404 /api/articles/0/comments - returns returns error 404", () => {
+    it("POST:404 /api/articles/0/comments - returns returns error 404 when passed and non-existense article ", () => {
       return request(app)
         .post("/api/articles/0/comments")
-        .send({})
+        .send({ username: "rogersop", body: "test" })
         .expect(404)
         .then(response => {
           expect(response.body.msg).to.equal("Not found");
         });
     });
-    it("POST:404 /api/articles/1/comments - returns returns error 404", () => {
+    it("POST:400 /api/articles/1/comments - returns returns error 400 when passed an object with a the body property missing", () => {
       return request(app)
         .post("/api/articles/1/comments")
-        .expect(404)
+        .expect(400)
         .send({
-          username: "test"
+          username: "rogersop"
         })
         .then(response => {
-          expect(response.body.msg).to.equal("Not found");
-        });
-    });
-    it("POST:404 /api/articles/1/comments - returns returns error 404", () => {
-      return request(app)
-        .post("/api/articles/1/comments")
-        .expect(404)
-        .send({})
-        .then(response => {
-          expect(response.body.msg).to.equal("Not found");
-        });
-    });
-    it("POST:404 /api/articles/1/comments - returns returns error 404", () => {
-      return request(app)
-        .post("/api/articles/1/comments")
-        .expect(404)
-        .send({
-          test: "test"
-        })
-        .then(response => {
-          expect(response.body.msg).to.equal("Not found");
-        });
-    });
-    it("POST:404 /api/articles/1/comments - returns returns error 404", () => {
-      return request(app)
-        .post("/api/articles/1000/comments")
-        .expect(404)
-        .send({
-          test: "test"
-        })
-        .then(response => {
-          expect(response.body.msg).to.equal("Not found");
+          expect(response.body.msg).to.equal("Bad request");
         });
     });
     it("GET:400 /api/articles/:article_id/comments - returns error 400", () => {

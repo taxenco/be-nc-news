@@ -91,7 +91,7 @@ The API contains several endpoints such as:
 # Authors
 
 - Carlos Beltran.
-- NortCoders.
+- NorthCoders.
 
 # Acknowledgments
 
