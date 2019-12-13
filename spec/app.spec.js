@@ -16,7 +16,7 @@ describe("/api", () => {
     return connection.seed.run();
   });
   describe("/invalidEndpoint", () => {
-    it("GET:200 /api - return JSON describing all the available endpoints on your API", () => {
+    it("GET:200 /api - return 200 JSON describing all the available endpoints on the API", () => {
       return request(app)
         .get("/api")
         .expect(200)
@@ -24,7 +24,7 @@ describe("/api", () => {
           expect(response.body).to.be.an("object");
         });
     });
-    it("GET:404 - invalid endpoint throws 404 error", () => {
+    it("GET:404 /invalidEndPoint - returns 404 when the path is inserted incorrectly", () => {
       return request(app)
         .get("/invalidEndPoint")
         .expect(404)
@@ -32,7 +32,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Not found");
         });
     });
-    it("DELETE:405 - invalid method throws 405 error", () => {
+    it("DELETE:405 /api - returns 405 invalid method when try to DELETE  /api", () => {
       return request(app)
         .delete("/api")
         .expect(405)
@@ -40,7 +40,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Method not allowed");
         });
     });
-    it("GET:404 - invalid endpoint throws 404 error", () => {
+    it("GET:404 /topics/invalidEndPoint - returns 404 when passed incorrect path", () => {
       return request(app)
         .get("/topics/invalidEndPoint")
         .expect(404)
@@ -50,7 +50,7 @@ describe("/api", () => {
     });
   });
   describe("/topics", () => {
-    it("GET:200 /api/topics - returns all topics", () => {
+    it("GET:200 /api/topics - returns 200 and all topics", () => {
       return request(app)
         .get("/api/topics")
         .expect(200)
@@ -64,7 +64,7 @@ describe("/api", () => {
           expect(response.body.topics[0].description).to.be.a("string");
         });
     });
-    it("POST:405 /api/topics - method not allowed", () => {
+    it("POST:405 /api/topics - returns 405 invalid method when try to POST", () => {
       return request(app)
         .post("/api/topics")
         .send({})
@@ -73,7 +73,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Method not allowed");
         });
     });
-    it("PATCH:405 /api/topics - method not allowed", () => {
+    it("PATCH:405 /api/topics - returns 405 invalid method when try to PATCH", () => {
       return request(app)
         .patch("/api/topics")
         .send({})
@@ -82,7 +82,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Method not allowed");
         });
     });
-    it("DELETE:405 /api/topics - method not allowed", () => {
+    it("DELETE:405 /api/topics - returns 405 invalid method when try to DELETE", () => {
       return request(app)
         .delete("/api/topics")
         .expect(405)
@@ -92,7 +92,7 @@ describe("/api", () => {
     });
   });
   describe("/users", () => {
-    it("GET:200 /api/users/:username - returns a user by its username", () => {
+    it("GET:200 /api/users/:username - returns 200 and a user by its username", () => {
       return request(app)
         .get("/api/users/rogersop")
         .expect(200)
@@ -108,7 +108,7 @@ describe("/api", () => {
           expect(response.body.user.name).to.be.a("string");
         });
     });
-    it("GET:404 /api/users/invalidUser return error 404", () => {
+    it("GET:404 /api/users/invalidUser - returns error 404 when you try to insert an integer as a user_id", () => {
       return request(app)
         .get("/api/users/1")
         .expect(404)
@@ -117,7 +117,7 @@ describe("/api", () => {
         });
     });
 
-    it("GET:404 /api/users/invalidUser return error 404", () => {
+    it("GET:404 /api/users/invalidUser - returns error 404 when you try to insert an invalid user_id", () => {
       return request(app)
         .get("/api/users/invalidUser")
         .expect(404)
@@ -125,7 +125,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Not found");
         });
     });
-    it("POST:405 /api/users/:username - method not allowed", () => {
+    it("POST:405 /api/users/:username - returns 405 invalid method when try to POST", () => {
       return request(app)
         .post("/api/users/1")
         .send({})
@@ -134,7 +134,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Method not allowed");
         });
     });
-    it("PATCH:405 /api/users/:username - method not allowed", () => {
+    it("PATCH:405 /api/users/:username - returns 405 invalid method when try to PATCH  ", () => {
       return request(app)
         .patch("/api/users/1")
         .send({})
@@ -143,7 +143,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Method not allowed");
         });
     });
-    it("DELETE:405 /api/users/:username - method not allowed", () => {
+    it("DELETE:405 /api/users/:username - returns 405 invalid method when try to DELETE", () => {
       return request(app)
         .delete("/api/users/1")
         .expect(405)
@@ -153,7 +153,7 @@ describe("/api", () => {
     });
   });
   describe("/articles", () => {
-    it("GET:200 /api/articles/:article_id - returns an article by its article_id", () => {
+    it("GET:200 /api/articles/:article_id - returns 200 an article by its article_id", () => {
       return request(app)
         .get("/api/articles/1")
         .expect(200)
@@ -179,7 +179,7 @@ describe("/api", () => {
           expect(response.body.article.comment_count).to.be.a("string");
         });
     });
-    it("PATCH:200 /api/articles/:article_id - returns an article by its article_id with the number of votes decremented", () => {
+    it("PATCH:200 /api/articles/:article_id - returns 200 an article by its article_id with the number of votes decremented", () => {
       return request(app)
         .patch("/api/articles/1")
         .send({ inc_votes: -1 })
@@ -198,7 +198,7 @@ describe("/api", () => {
           expect(response.body.article.votes).to.be.equal(99);
         });
     });
-    it("PATCH:200 /api/articles/:article_id - returns an article by its article_id with the number of votes incremented", () => {
+    it("PATCH:200 /api/articles/:article_id - returns 200 an article by its article_id with the number of votes incremented", () => {
       return request(app)
         .patch("/api/articles/1")
         .send({ inc_votes: 1 })
@@ -217,7 +217,7 @@ describe("/api", () => {
           expect(response.body.article.votes).to.be.equal(101);
         });
     });
-    it("PATCH:200 /api/articles/:article_id -return error 200 when an empty  object is passed", () => {
+    it("PATCH:200 /api/articles/:article_id -returns error 200 when an empty object is passed", () => {
       return request(app)
         .patch("/api/articles/1")
         .send({})
@@ -259,7 +259,7 @@ describe("/api", () => {
           expect(response.body.comment.created_at).to.be.a("string");
         });
     });
-    it("GET:200 /api/articles/:article_id/comments - returns comments by article", () => {
+    it("GET:200 /api/articles/:article_id/comments - returns 200 the comments by article when the article contain comments", () => {
       return request(app)
         .get("/api/articles/1/comments")
         .expect(200)
@@ -279,7 +279,7 @@ describe("/api", () => {
           expect(response.body.comments[0].created_at).to.be.a("string");
         });
     });
-    it("GET:200 /api/articles/:article_id/comments - returns comments by article", () => {
+    it("GET:200 /api/articles/:article_id/comments - returns 200 the comments by article when the article does not contain comments", () => {
       return request(app)
         .get("/api/articles/2/comments")
         .expect(200)
@@ -288,7 +288,7 @@ describe("/api", () => {
           expect(response.body.comments.length).to.be.equal(0);
         });
     });
-    it("GET:200 /api/articles/:article_id/comments - returns comments by article", () => {
+    it("GET:200 /api/articles/:article_id/comments - returns 200 comments by article and sorted by comment_id and in descending order by default", () => {
       return request(app)
         .get("/api/articles/1/comments?sort_by=comment_id")
         .expect(200)
@@ -304,7 +304,7 @@ describe("/api", () => {
           expect(response.body.comments).to.be.descendingBy("comment_id");
         });
     });
-    it("GET:200 /api/articles/:article_id/comments - returns comments by article", () => {
+    it("GET:200 /api/articles/:article_id/comments - returns 200 comments by article and sorted by author and in descending order by default", () => {
       return request(app)
         .get("/api/articles/1/comments?sort_by=author")
         .expect(200)
@@ -322,7 +322,7 @@ describe("/api", () => {
           expect(response.body.comments).to.be.descendingBy("created_at");
         });
     });
-    it("GET:200 /api/articles/:article_id/comments - returns comments by article", () => {
+    it("GET:200 /api/articles/:article_id/comments - returns 200 comments by article and sorted by comment_id in descending order ", () => {
       return request(app)
         .get("/api/articles/1/comments?sort_by=comment_id&order=asc")
         .expect(200)
@@ -331,7 +331,7 @@ describe("/api", () => {
           expect(response.body.comments).to.be.ascendingBy("comment_id");
         });
     });
-    it("GET:200 /api/articles/:article_id/comments - returns comments by article", () => {
+    it("GET:200 /api/articles/:article_id/comments - returns 200 comments by article and sorted by author in ascending order", () => {
       return request(app)
         .get("/api/articles/1/comments?sort_by=author&order=asc")
         .expect(200)
@@ -340,7 +340,7 @@ describe("/api", () => {
           expect(response.body.comments).to.be.ascendingBy("author");
         });
     });
-    it("GET:200 /api/articles/:article_id/comments - returns comments by article", () => {
+    it("GET:200 /api/articles/:article_id/comments - returns 200 comments by article and sorted by votes in ascending order", () => {
       return request(app)
         .get("/api/articles/1/comments?sort_by=votes&order=asc")
         .expect(200)
@@ -349,7 +349,7 @@ describe("/api", () => {
           expect(response.body.comments).to.be.ascendingBy("votes");
         });
     });
-    it("GET:200 /api/articles/:article_id/comments - returns comments by article", () => {
+    it("GET:200 /api/articles/:article_id/comments - returns 200 comments by article and sorted by created_at in ascending order", () => {
       return request(app)
         .get("/api/articles/1/comments?sort_by=created_at&order=asc")
         .expect(200)
@@ -358,7 +358,7 @@ describe("/api", () => {
           expect(response.body.comments).to.be.ascendingBy("created_at");
         });
     });
-    it("GET:200 /api/articles/:article_id/comments - returns comments by article", () => {
+    it("GET:200 /api/articles/:article_id/comments - returns 200 comments by article and sorted by created_at in ascending order", () => {
       return request(app)
         .get("/api/articles/1/comments?order=asc")
         .expect(200)
@@ -367,7 +367,7 @@ describe("/api", () => {
           expect(response.body.comments).to.be.ascendingBy("created_at");
         });
     });
-    it("GET:200 /api/articles/:article_id/comments - returns comments by article", () => {
+    it("GET:200 /api/articles/:article_id/comments - returns 200 comments by article and sorted by created_at by default in ascending order", () => {
       return request(app)
         .get("/api/articles/1/comments?order=desc")
         .expect(200)
@@ -376,7 +376,7 @@ describe("/api", () => {
           expect(response.body.comments).to.be.descendingBy("created_at");
         });
     });
-    it("GET:200 /api/articles - returns an object with an array of articles ", () => {
+    it("GET:200 /api/articles - returns 200 an object with an array of articles ", () => {
       return request(app)
         .get("/api/articles")
         .expect(200)
@@ -402,7 +402,7 @@ describe("/api", () => {
           expect(response.body.articles[0].comment_count).to.be.a("string");
         });
     });
-    it("GET:200 /api/articles - returns an object with an array of articles sorted by any valid column and default to created_at and descending", () => {
+    it("GET:200 /api/articles - returns 200 an object with an array of articles sorted by any valid column and default to created_at and descending", () => {
       return request(app)
         .get("/api/articles")
         .expect(200)
@@ -411,7 +411,7 @@ describe("/api", () => {
           expect(response.body.articles).to.be.descendingBy("created_at");
         });
     });
-    it("GET:200 /api/articles - returns an object with an array of articles sorted by article_id and descending by default", () => {
+    it("GET:200 /api/articles - returns 200 an object with an array of articles sorted by article_id and descending by default", () => {
       return request(app)
         .get("/api/articles?sort_by=article_id")
         .expect(200)
@@ -422,7 +422,7 @@ describe("/api", () => {
           });
         });
     });
-    it("GET:200 /api/articles - returns an object with an array of articles sorted by votes and descending by default", () => {
+    it("GET:200 /api/articles - returns 200 an object with an array of articles sorted by votes and descending by default", () => {
       return request(app)
         .get("/api/articles?sort_by=votes")
         .expect(200)
@@ -433,7 +433,7 @@ describe("/api", () => {
           });
         });
     });
-    it("GET:200 /api/articles - returns an object with an array of articles sorted by comment_count and descending by default", () => {
+    it("GET:200 /api/articles - returns 200 an object with an array of articles sorted by comment_count and descending by default", () => {
       return request(app)
         .get("/api/articles?sort_by=comment_count")
         .expect(200)
@@ -444,7 +444,7 @@ describe("/api", () => {
           });
         });
     });
-    it("GET:200 /api/articles - returns an object with an array of in ascending order and sorted by created_at by default", () => {
+    it("GET:200 /api/articles - returns 200 an object with an array of in ascending order and sorted by created_at by default", () => {
       return request(app)
         .get("/api/articles?order=asc")
         .expect(200)
@@ -455,7 +455,7 @@ describe("/api", () => {
           });
         });
     });
-    it("GET:200 /api/articles - returns an object with an array of in descending order and sorted by created_at by default", () => {
+    it("GET:200 /api/articles - returns 200 an object with an array of in descending order and sorted by created_at by default", () => {
       return request(app)
         .get("/api/articles?order=desc")
         .expect(200)
@@ -466,7 +466,7 @@ describe("/api", () => {
           });
         });
     });
-    it("GET:200 /api/articles - returns filtered by author", () => {
+    it("GET:200 /api/articles - returns 200 an object with the filtered by author", () => {
       return request(app)
         .get("/api/articles?author=rogersop")
         .expect(200)
@@ -481,7 +481,7 @@ describe("/api", () => {
           );
         });
     });
-    it("GET:200 /api/articles - returns filtered by topic", () => {
+    it("GET:200 /api/articles - returns 200 an object with the filtered by topic", () => {
       return request(app)
         .get("/api/articles?topic=mitch")
         .expect(200)
@@ -496,7 +496,7 @@ describe("/api", () => {
           );
         });
     });
-    it("GET:200 /api/articles - empty array for user with no articles", () => {
+    it("GET:200 /api/articles -return 200 an empty array for user with no articles", () => {
       return request(app)
         .get("/api/articles?author=lurker")
         .expect(200)
@@ -505,15 +505,6 @@ describe("/api", () => {
           expect(response.body.articles).to.eql([]);
         });
     });
-    it("GET:200 /api/articles - empty array for user with no articles", () => {
-      return request(app)
-        .get("/api/articles?topic=paper")
-        .expect(200)
-        .then(response => {
-          expect(response.body).to.be.an("object");
-          expect(response.body.articles).to.eql([]);
-        });
-    });
     it("PATCH:400 /api/articles/:article_id -return error 400 when invalid object is passed", () => {
       return request(app)
         .patch("/api/articles/1")
@@ -532,7 +523,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Bad request");
         });
     });
-    it("PATCH:400 /api/articles/invalidEndPoint - returns error 404", () => {
+    it("PATCH:400 /api/articles/invalidEndPoint - return error 400 when an invalid path is passed", () => {
       return request(app)
         .patch("/api/articles/invalid")
         .send({ inc_votes: 1 })
@@ -541,7 +532,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Bad request");
         });
     });
-    it("PATCH:400 /api/articles/invalidEndPoint - returns error 404", () => {
+    it("PATCH:404 /api/articles/invalidEndPoint - return error 404 when an no-existence article is passed", () => {
       return request(app)
         .patch("/api/articles/0")
         .send({ inc_votes: 1 })
@@ -550,16 +541,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Not found");
         });
     });
-    it("PATCH:400 /api/articles/invalidEndPoint - returns error 404", () => {
-      return request(app)
-        .patch("/api/articles/99")
-        .send({ inc_votes: 1 })
-        .expect(404)
-        .then(response => {
-          expect(response.body.msg).to.equal("Not found");
-        });
-    });
-    it("GET:404 /api/articles/invalidEndPoint - returns error 404", () => {
+    it("GET:404 /api/articles/invalidEndPoint - return error 404 when an invalid end-point is passed", () => {
       return request(app)
         .get("/api/articles/invalidEndPoint")
         .expect(400)
@@ -567,7 +549,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Bad request");
         });
     });
-    it("GET:404 /api/articles/invalidEndPoint - returns error 404", () => {
+    it("GET:404 /api/articles/invalidEndPoint - return error 404 when an no-existence article is passed", () => {
       return request(app)
         .get("/api/articles/0")
         .expect(404)
@@ -575,15 +557,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Not found");
         });
     });
-    it("GET:404 /api/articles/invalidEndPoint - returns error 404", () => {
-      return request(app)
-        .get("/api/articles/999")
-        .expect(404)
-        .then(response => {
-          expect(response.body.msg).to.equal("Not found");
-        });
-    });
-    it("DELETE:405 /api/articles/:article_id - method not allowed", () => {
+    it("DELETE:405 /api/articles/:article_id - returns 405 invalid method when try to DELETE", () => {
       return request(app)
         .delete("/api/articles/1")
         .expect(405)
@@ -591,7 +565,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Method not allowed");
         });
     });
-    it("POST:400 /api/articles/invalidEndPoint/comments - returns returns error 404", () => {
+    it("POST:400 /api/articles/invalidEndPoint/comments - returns error 404 when an invalid end-point is passed", () => {
       return request(app)
         .post("/api/articles/invalidEndPoint/comments")
         .expect(400)
@@ -600,7 +574,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Bad request");
         });
     });
-    it("POST:404 /api/articles/0/comments - returns returns error 404 when passed and non-existense article ", () => {
+    it("POST:404 /api/articles/0/comments - returns returns error 404 when passed and non-existence article ", () => {
       return request(app)
         .post("/api/articles/0/comments")
         .send({ username: "rogersop", body: "test" })
@@ -620,7 +594,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Bad request");
         });
     });
-    it("GET:400 /api/articles/:article_id/comments - returns error 400", () => {
+    it("GET:400 /api/articles/:article_id/comments - returns error 400 when and invalid end-point is passed ", () => {
       return request(app)
         .get("/api/articles/invalidEndPoint/comments")
         .expect(400)
@@ -628,7 +602,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Bad request");
         });
     });
-    it("GET:400 /api/articles/:article_id/comments - returns error 400", () => {
+    it("GET:400 /api/articles/:article_id/comments - returns error 400 when and invalid sorted query passed", () => {
       return request(app)
         .get("/api/articles/1/comments?sort_by=test")
         .expect(400)
@@ -636,7 +610,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Bad request");
         });
     });
-    it("GET:400 /api/articles/:article_id/comments - returns error 400", () => {
+    it("GET:400 /api/articles/:article_id/comments - returns error 400 when and invalid sorted and order query passed", () => {
       return request(app)
         .get("/api/articles/1/comments?sort_by=test&order=test")
         .expect(400)
@@ -644,7 +618,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Bad request");
         });
     });
-    it("GET:404 /api/articles/:article_id/comments - returns error 400", () => {
+    it("GET:404 /api/articles/:article_id/comments - returns error 404 when an no-existence article is passed", () => {
       return request(app)
         .get("/api/articles/0/comments")
         .expect(404)
@@ -652,15 +626,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Not found");
         });
     });
-    it("GET:404 /api/articles/:article_id/comments - returns error 400", () => {
-      return request(app)
-        .get("/api/articles/999/comments")
-        .expect(404)
-        .then(response => {
-          expect(response.body.msg).to.equal("Not found");
-        });
-    });
-    it("GET:404 /api/articles - returns error 404 ", () => {
+    it("GET:404 /api/articles - returns error 404 when an invalid sort query is passed ", () => {
       return request(app)
         .get("/api/article?sort_by=invalid")
         .expect(404)
@@ -668,7 +634,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Not found");
         });
     });
-    it("GET:404 /api/articles - returns error 404 ", () => {
+    it("GET:404 /api/articles - returns error 404 when and invalid order query is passed", () => {
       return request(app)
         .get("/api/article?order=invalid")
         .expect(404)
@@ -676,7 +642,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Not found");
         });
     });
-    it("GET:404 /api/articles - returns error 404 ", () => {
+    it("GET:404 /api/articles - returns error 404 when and invalid sort and order query are passed", () => {
       return request(app)
         .get("/api/article?sort_by=invalid&order=invalid")
         .expect(404)
@@ -684,7 +650,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Not found");
         });
     });
-    it("GET:404 /api/articles - returns error 404 ", () => {
+    it("GET:404 /api/articles - returns error 404 when and invalid topic query is passed ", () => {
       return request(app)
         .get("/api/article?topic=invalid")
         .expect(404)
@@ -692,7 +658,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Not found");
         });
     });
-    it("GET:404 /api/articles - returns error 404 ", () => {
+    it("GET:404 /api/articles - returns error 404 when and invalid author query is passed ", () => {
       return request(app)
         .get("/api/article?author=invalid")
         .expect(404)
@@ -700,7 +666,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Not found");
         });
     });
-    it("GET:404 /api/articles - returns error 404 ", () => {
+    it("GET:404 /api/articles - returns error 404 when and invalid author and sort query is passed ", () => {
       return request(app)
         .get("/api/article?author=invalid&sort_by=invalid")
         .expect(404)
@@ -708,7 +674,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Not found");
         });
     });
-    it("GET:404 /api/articles - returns error 404 ", () => {
+    it("GET:404 /api/articles - returns error 404 when and invalid topic and sort query is passed ", () => {
       return request(app)
         .get("/api/article?topic=invalid&sort_by=invalid")
         .expect(404)
@@ -716,7 +682,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Not found");
         });
     });
-    it("GET:404 /api/articles - returns error 404 ", () => {
+    it("GET:404 /api/articles - returns error 404 when an no-existence topic is passed ", () => {
       return request(app)
         .get("/api/articles?topic=not-a-topic")
         .expect(404)
@@ -724,7 +690,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Not found");
         });
     });
-    it("DELETE:405 /api/articles - method not allowed", () => {
+    it("DELETE:405 /api/articles - returns 405 invalid method when try to DELETE", () => {
       return request(app)
         .delete("/api/articles")
         .expect(405)
@@ -732,7 +698,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Method not allowed");
         });
     });
-    it("PATCH:405 /api/articles - method not allowed", () => {
+    it("POST:405 /api/articles - returns 405 invalid method when try to PATCH", () => {
       return request(app)
         .patch("/api/articles")
         .send({})
@@ -741,16 +707,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Method not allowed");
         });
     });
-    it("POST:405 /api/articles - method not allowed", () => {
-      return request(app)
-        .patch("/api/articles")
-        .send({})
-        .expect(405)
-        .then(response => {
-          expect(response.body.msg).to.equal("Method not allowed");
-        });
-    });
-    it("DELETE:405 /api/articles/:article_id/comments - method not allowed", () => {
+    it("DELETE:405 /api/articles/:article_id/comments - returns 405 invalid method when try to DELETE", () => {
       return request(app)
         .delete("/api/articles/1/comments")
         .expect(405)
@@ -758,7 +715,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Method not allowed");
         });
     });
-    it("PATCH:405 /api/articles/:article_id/comments - method not allowed", () => {
+    it("PATCH:405 /api/articles/:article_id/comments - returns 405 invalid method when try to PATCH", () => {
       return request(app)
         .patch("/api/articles/1/comments")
         .send({})
@@ -769,7 +726,7 @@ describe("/api", () => {
     });
   });
   describe("/comments", () => {
-    it("PATCH:200 /api/comments/:comment_id - returns the updated comment with an increased vote", () => {
+    it("PATCH:200 /api/comments/:comment_id - returns 200 and the updated comment with an increased vote", () => {
       return request(app)
         .patch("/api/comments/1")
         .send({ inc_votes: 1 })
@@ -793,7 +750,7 @@ describe("/api", () => {
           expect(response.body.comment.body).to.be.a("string");
         });
     });
-    it("PATCH:200 /api/comments/:comment_id - returns the updated comment with an decreased vote", () => {
+    it("PATCH:200 /api/comments/:comment_id - returns 200 and updated comment with an decreased vote", () => {
       return request(app)
         .patch("/api/comments/1")
         .send({ inc_votes: -1 })
@@ -817,7 +774,7 @@ describe("/api", () => {
           expect(response.body.comment.body).to.be.a("string");
         });
     });
-    it("PATCH:200 /api/comments/:comment_id - returns the updated comment with an decreased vote", () => {
+    it("PATCH:200 /api/comments/:comment_id - returns 200 and the updated comment with an decreased vote", () => {
       return request(app)
         .patch("/api/comments/1")
         .send({})
@@ -841,13 +798,13 @@ describe("/api", () => {
           expect(response.body.comment.body).to.be.a("string");
         });
     });
-    it("DELETE:204 /api/comments/:comment_id - returns status 204", () => {
+    it("DELETE:204 /api/comments/:comment_id - returns status 204 when you DELETE a comment", () => {
       return request(app)
         .delete("/api/comments/1")
         .expect(204)
         .then(response => {});
     });
-    it("PATCH:400 /api/comments/:comment_id - returns error 400 ", () => {
+    it("PATCH:400 /api/comments/:comment_id - returns error 400 when you PATCH an invalid comment_id ", () => {
       return request(app)
         .patch("/api/comments/invalid")
         .send({ inc_votes: -1 })
@@ -856,7 +813,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Bad request");
         });
     });
-    it("PATCH:404 /api/comments/:comment_id - returns error 404 ", () => {
+    it("PATCH:404 /api/comments/:comment_id - returns error 404 when passed an no-existence comment_id ", () => {
       return request(app)
         .patch("/api/comments/0")
         .send({ inc_votes: -1 })
@@ -865,16 +822,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Not found");
         });
     });
-    it("PATCH:404 /api/comments/:comment_id - returns error 404 ", () => {
-      return request(app)
-        .patch("/api/comments/999")
-        .send({ inc_votes: -1 })
-        .expect(404)
-        .then(response => {
-          expect(response.body.msg).to.equal("Not found");
-        });
-    });
-    it("PATCH:400 /api/comments/:comment_id - returns error 404 ", () => {
+    it("PATCH:400 /api/comments/:comment_id - returns error 400 when passed an no-existence comment_id and a wrong object ", () => {
       return request(app)
         .patch("/api/comments/999")
         .send({ inc_votes: "test" })
@@ -883,7 +831,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Bad request");
         });
     });
-    it("PATCH:404 /api/comments/:comment_id - returns error 404 ", () => {
+    it("PATCH:404 /api/comments/:comment_id - returns error 404 when passed and empty object ", () => {
       return request(app)
         .patch("/api/comments/999")
         .send({})
@@ -892,7 +840,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Not found");
         });
     });
-    it("DELETE:404 /api/comments/:comment_id - returns status 204", () => {
+    it("DELETE:404 /api/comments/:comment_id - returns status 404 when DELETE a no-existent comment", () => {
       return request(app)
         .delete("/api/comments/0")
         .expect(404)
@@ -900,15 +848,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Not found");
         });
     });
-    it("DELETE:404 /api/comments/:comment_id - returns status 204", () => {
-      return request(app)
-        .delete("/api/comments/999")
-        .expect(404)
-        .then(response => {
-          expect(response.body.msg).to.equal("Not found");
-        });
-    });
-    it("DELETE:400 /api/comments/:comment_id - returns status 204", () => {
+    it("DELETE:400 /api/comments/:comment_id - returns status 400 whe you try to DELETE an invalid comment_id", () => {
       return request(app)
         .delete("/api/comments/invalid")
         .expect(400)
@@ -916,7 +856,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Bad request");
         });
     });
-    it("GET:405 /api/comments/:comment_id  - method not allowed", () => {
+    it("GET:405 /api/comments/:comment_id  - returns 405 invalid method when try to GET", () => {
       return request(app)
         .get("/api/comments/1")
         .expect(405)
@@ -924,7 +864,7 @@ describe("/api", () => {
           expect(response.body.msg).to.equal("Method not allowed");
         });
     });
-    it("POST:405 /api/comments/:comment_id  - method not allowed", () => {
+    it("POST:405 /api/comments/:comment_id  - returns 405 invalid method when try to POST", () => {
       return request(app)
         .post("/api/comments/1")
         .send({})
