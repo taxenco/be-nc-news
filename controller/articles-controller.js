@@ -46,8 +46,8 @@ exports.getArticleComment = (request, response, next) => {
 };
 
 exports.getArticles = (request, response, next) => {
-  const { sort_by, order, topic, author } = request.query;
-  fetchArticles(sort_by, order, author, topic)
+  const { sort_by, order, topic, author, page, limit } = request.query;
+  fetchArticles(sort_by, order, author, topic, page, limit)
     .then(articles => {
       response.status(200).send({ articles });
     })

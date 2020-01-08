@@ -402,6 +402,47 @@ describe("/api", () => {
           expect(response.body.articles[0].comment_count).to.be.a("string");
         });
     });
+    it("GET:200 /api/articles - returns 200 an object paginated and limit of 5 articles per page by default in page 1 by default  ", () => {
+      return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(response => {
+          expect(response.body).to.be.an("object");
+          expect(response.body.articles.length).to.be.equal(5);
+
+
+        });
+    });
+    it("GET:200 /api/articles - returns 200 an object paginated and limit of 5 articles per page by default in page 2", () => {
+      return request(app)
+        .get("/api/articles?page=2")
+        .expect(200)
+        .then(response => {
+          expect(response.body).to.be.an("object");
+          expect(response.body.articles.length).to.be.equal(5);
+
+        });
+    });
+    it("GET:200 /api/articles - returns 200 an object paginated and limit of 10 articles per page in page 1", () => {
+      return request(app)
+        .get("/api/articles?page=1&limit=10")
+        .expect(200)
+        .then(response => {
+          expect(response.body).to.be.an("object");
+          expect(response.body.articles.length).to.be.equal(10);
+
+        });
+    });
+    it.only("GET:200 /api/articles - returns 200 an object paginated and limit of 3 articles per page in page 3", () => {
+      return request(app)
+        .get("/api/articles?page=3&limit=3")
+        .expect(200)
+        .then(response => {
+          expect(response.body).to.be.an("object");
+          expect(response.body.articles.length).to.be.equal(3);
+
+        });
+    });
     it("GET:200 /api/articles - returns 200 an object with an array of articles sorted by any valid column and default to created_at and descending", () => {
       return request(app)
         .get("/api/articles")
