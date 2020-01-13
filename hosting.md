@@ -156,8 +156,8 @@ Make sure your package.json has this as a start script:
 Commit your changes, and push to heroku master.
 
 ```bash
-  .limit(limit)
-    .offset((page - 1) * limit)```
+git push heroku master
+```
 
 ## 9. Review Your App
 

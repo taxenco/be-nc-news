@@ -433,7 +433,7 @@ describe("/api", () => {
 
         });
     });
-    it.only("GET:200 /api/articles - returns 200 an object paginated and limit of 3 articles per page in page 3", () => {
+    it("GET:200 /api/articles - returns 200 an object paginated and limit of 3 articles per page in page 3", () => {
       return request(app)
         .get("/api/articles?page=3&limit=3")
         .expect(200)
