@@ -408,9 +408,7 @@ describe("/api", () => {
         .expect(200)
         .then(response => {
           expect(response.body).to.be.an("object");
-          expect(response.body.articles.length).to.be.equal(5);
-
-
+          expect(response.body.articles.length).to.be.equal(10);
         });
     });
     it("GET:200 /api/articles - returns 200 an object paginated and limit of 5 articles per page by default in page 2", () => {
@@ -419,8 +417,7 @@ describe("/api", () => {
         .expect(200)
         .then(response => {
           expect(response.body).to.be.an("object");
-          expect(response.body.articles.length).to.be.equal(5);
-
+          expect(response.body.articles.length).to.be.equal(2);
         });
     });
     it("GET:200 /api/articles - returns 200 an object paginated and limit of 10 articles per page in page 1", () => {
@@ -430,7 +427,6 @@ describe("/api", () => {
         .then(response => {
           expect(response.body).to.be.an("object");
           expect(response.body.articles.length).to.be.equal(10);
-
         });
     });
     it("GET:200 /api/articles - returns 200 an object paginated and limit of 3 articles per page in page 3", () => {
@@ -440,7 +436,6 @@ describe("/api", () => {
         .then(response => {
           expect(response.body).to.be.an("object");
           expect(response.body.articles.length).to.be.equal(3);
-
         });
     });
     it("GET:200 /api/articles - returns 200 an object with an array of articles sorted by any valid column and default to created_at and descending", () => {
