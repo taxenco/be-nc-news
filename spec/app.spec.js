@@ -411,6 +411,15 @@ describe("/api", () => {
           expect(response.body.articles.length).to.be.equal(10);
         });
     });
+    it("GET:200 /api/articles - returns 200 an object with the total count of articles", () => {
+      return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(response => {
+          expect(response.body).to.be.an("object");
+          expect(response.body.total_count).to.be.equal(12);
+        });
+    });
     it("GET:200 /api/articles - returns 200 an object paginated and limit of 5 articles per page by default in page 2", () => {
       return request(app)
         .get("/api/articles?page=2")
@@ -537,8 +546,8 @@ describe("/api", () => {
         .get("/api/articles?author=lurker")
         .expect(200)
         .then(response => {
-          expect(response.body).to.be.an("object");
-          expect(response.body.articles).to.eql([]);
+          expect(response.body).to.be.an("array");
+          expect(response.body).to.eql([]);
         });
     });
     it("PATCH:400 /api/articles/:article_id -return error 400 when invalid object is passed", () => {

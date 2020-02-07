@@ -64,39 +64,30 @@ const fetchArticleComment = (
   page = 1,
   limit = 10
 ) => {
-  return (
-    connection
-      .select("*")
-      .from("comments")
-      .where("article_id", "=", article_id)
-      .limit(limit)
-      .offset((page - 1) * limit)
-      .modify(query => {
-        if (sort_by !== undefined) {
-          return query.orderBy(sort_by, order);
-        }
-      })
-
-      // .modify(query => {
-      //   const offset = (page - 1) * limit;
-      //   if (offset) {
-      //     return query.offset(offset);
-      //   }
-      // })
-      .then(comments => {
-        if (article_id) {
-          return Promise.all([comments, fetchArticleById(article_id)]);
-        }
-        return Promise.reject({ status: 404, msg: "Not found" });
-      })
-      .then(([commentPromise, articlePromise]) => {
-        if (commentPromise.length === 0 && articlePromise.length > 0) {
-          return commentPromise;
-        } else {
-          return commentPromise;
-        }
-      })
-  );
+  return connection
+    .select("*")
+    .from("comments")
+    .where("article_id", "=", article_id)
+    .limit(limit)
+    .offset((page - 1) * limit)
+    .modify(query => {
+      if (sort_by !== undefined) {
+        return query.orderBy(sort_by, order);
+      }
+    })
+    .then(comments => {
+      if (article_id) {
+        return Promise.all([comments, fetchArticleById(article_id)]);
+      }
+      return Promise.reject({ status: 404, msg: "Not found" });
+    })
+    .then(([commentPromise, articlePromise]) => {
+      if (commentPromise.length === 0 && articlePromise.length > 0) {
+        return commentPromise;
+      } else {
+        return commentPromise;
+      }
+    });
 };
 
 const fetchArticles = (
@@ -107,53 +98,61 @@ const fetchArticles = (
   page = 1,
   limit = 10
 ) => {
-  return (
-    connection
-      .select("articles.*")
-      .from("articles")
-      .leftJoin("comments", "articles.article_id", "comments.article_id")
-      .groupBy("articles.article_id")
-      .orderBy(sort_by, order)
-      .limit(limit)
-      .offset((page - 1) * limit)
-      .modify(query => {
-        if (author !== undefined) {
-          return query.where("articles.author", "=", author);
-        }
-      })
-      .modify(query => {
-        if (topic !== undefined) {
-          return query.where("articles.topic", "=", topic);
-        }
-      })
-      // .modify(query => {
-      //   const offset = (page - 1) * limit;
-      //   if (offset) {
-      //     return query.offset(offset);
-      //   }
-      // })
-      .count({ comment_count: "comments.comment_id" })
-      // .limit(limit)
-      .returning("*")
-      .then(article => {
-        if (article.length >= 1) {
-          return [article];
-        } else {
-          if (author) {
-            return Promise.all([article, fetchUserByUserName(author)]);
-          } else if (topic) {
-            return Promise.all([article, fetchAllTopics(topic)]);
-          }
-        }
-      })
-      .then(([articles, topic]) => {
-        if (articles.length === 0 && topic.length === 0) {
-          return Promise.reject({ status: 404, msg: "Not found" });
-        }
+  const articleCount = connection
+    .select("*")
+    .from("articles")
+    .modify(query => {
+      if (author !== undefined) {
+        return query.where("articles.author", "=", author);
+      }
+    })
+    .modify(query => {
+      if (topic !== undefined) {
+        return query.where("articles.topic", "=", topic);
+      }
+    })
+    .then(articles => articles.length);
 
-        return articles;
-      })
-  );
+  const articlesQuery = connection
+    .select("articles.*")
+    .from("articles")
+    .leftJoin("comments", "articles.article_id", "comments.article_id")
+    .groupBy("articles.article_id")
+    .orderBy(sort_by, order)
+    .limit(limit)
+    .offset((page - 1) * limit)
+    .modify(query => {
+      if (author !== undefined) {
+        return query.where("articles.author", "=", author);
+      }
+    })
+    .modify(query => {
+      if (topic !== undefined) {
+        return query.where("articles.topic", "=", topic);
+      }
+    })
+    .count({ comment_count: "comments.comment_id" })
+    .returning("*");
+
+  return Promise.all([articlesQuery, articleCount])
+    .then(([articles, count]) => {
+      if (articles.length >= 1) {
+        return [{ articles, total_count: count }];
+      } else {
+        if (author) {
+          return Promise.all([articles, fetchUserByUserName(author)]);
+        } else if (topic) {
+          return Promise.all([articles, fetchAllTopics(topic)]);
+        }
+      }
+    })
+    .then(([articles, topic]) => {
+      if (articles.length === 0 && topic.length === 0) {
+        return Promise.reject({ status: 404, msg: "Not found" });
+      }
+
+      return articles;
+    });
 };
 
 module.exports = {
