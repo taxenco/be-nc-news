@@ -9,9 +9,9 @@ data into a database by using Knex. Besides, the API contains several endpoints,
 * Download the project on [https://github.com/taxenco/be-nc-news].
 * Go to your terminal an run the the following command --> git clone https://github.com/taxenco/Northcoders_BackEnd_Project.
 * Access to Visual Studio Code or another alternative source-code editor an open the project. Alternatively, you can access the project on through the terminal.
-* Install npm package manager for the JavaScript.
-* Install Mocha and Chai for unit testing and supertest for testing HTTP.
-* Install Knex.js, which is a query builder for PostgreSQL.
+* `Install npm` package manager for the JavaScript.
+* `Install Mocha` and Chai for unit testing and supertest for testing HTTP.
+* `Install Knex.js`, which is a query builder for PostgreSQL.
 * Install Heroku for hosting. Heroku is a cloud platform and supports several programming languages such as JavaScript.
 
 ** Note: To run the project locally you must have node and psql installed
