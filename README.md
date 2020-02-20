@@ -14,6 +14,8 @@ data into a database by using Knex. Besides, the API contains several endpoints,
 * Install Knex.js, which is a query builder for PostgreSQL.
 * Install Heroku for hosting. Heroku is a cloud platform and supports several programming languages such as JavaScript.
 
+** Note: To run the project locally you must have node and psql installed
+
 # Prerequisites
 
 * Visual Studio Code or another alternative source-code editor.
